@@ -1,151 +1,65 @@
-<div align="center">
-<img align="left" width="100" height="100" src="https://github.com/user-attachments/assets/1834fc25-42ef-4237-9feb-53a01c137e83" alt="">
+# 🏀 25-2 YSAL Project – Samsung Thunders Collaboration
 
-# SAMURAI: Adapting Segment Anything Model for Zero-Shot Visual Tracking with Motion-Aware Memory
+This repository is part of a **collaborative project with Samsung Thunders**, focusing on **basketball broadcast video analysis**, especially **player tracking and pose detection** from TV/YouTube broadcast footage.
 
-[Cheng-Yen Yang](https://yangchris11.github.io), [Hsiang-Wei Huang](https://hsiangwei0903.github.io/), [Wenhao Chai](https://rese1f.github.io/), [Zhongyu Jiang](https://zhyjiang.github.io/#/), [Jenq-Neng Hwang](https://people.ece.uw.edu/hwang/)
+Our pipeline uses **SAMURAI (Segment Anything Model for video tracking)** to track players over frames and detect body joints, enabling automated data collection of player movements during games.
 
-[Information Processing Lab, University of Washington](https://ipl-uw.github.io/) 
-</div>
+Reference implementation (SAMURAI):
+🔗 https://github.com/yangchris11/samurai
 
 
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/samurai-adapting-segment-anything-model-for-1/visual-object-tracking-on-lasot-ext)](https://paperswithcode.com/sota/visual-object-tracking-on-lasot-ext?p=samurai-adapting-segment-anything-model-for-1)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/samurai-adapting-segment-anything-model-for-1/visual-object-tracking-on-got-10k)](https://paperswithcode.com/sota/visual-object-tracking-on-got-10k?p=samurai-adapting-segment-anything-model-for-1)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/samurai-adapting-segment-anything-model-for-1/visual-object-tracking-on-needforspeed)](https://paperswithcode.com/sota/visual-object-tracking-on-needforspeed?p=samurai-adapting-segment-anything-model-for-1)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/samurai-adapting-segment-anything-model-for-1/visual-object-tracking-on-lasot)](https://paperswithcode.com/sota/visual-object-tracking-on-lasot?p=samurai-adapting-segment-anything-model-for-1)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/samurai-adapting-segment-anything-model-for-1/visual-object-tracking-on-otb-2015)](https://paperswithcode.com/sota/visual-object-tracking-on-otb-2015?p=samurai-adapting-segment-anything-model-for-1)
+---
 
-[[Arxiv]](https://arxiv.org/abs/2411.11922) [[Project Page]](https://yangchris11.github.io/samurai/) [[Raw Results]](https://drive.google.com/drive/folders/1ssiDmsC7mw5AiItYQG4poiR1JgRq305y?usp=sharing) 
+## 📌 Project Description
 
-This repository is the official implementation of SAMURAI: Adapting Segment Anything Model for Zero-Shot Visual Tracking with Motion-Aware Memory
+This project implements a pipeline that:
+- Receives basketball broadcast video
+- Tracks players frame-by-frame
+- Detects their joints (pose keypoints)
+- Saves and records those results for further analysis (e.g., shot contest, defense proximity)
 
-https://github.com/user-attachments/assets/9d368ca7-2e9b-4fed-9da0-d2efbf620d88
+We aim to build an automated system that converts raw broadcast videos into machine-readable player data.
 
-All rights are reserved to the copyright owners (TM & © Universal (2019)). This clip is not intended for commercial use and is solely for academic demonstration in a research paper. Original source can be found [here](https://www.youtube.com/watch?v=cwUzUzpG8aM&t=4s).
 
-## News
-- [ ] **Incoming**: Support vot-challenge toolkit intergration.
-- [ ] **Incoming**: Release demo script to support inference on video (with mask prompt).
-- [x] **2025/02/18**: Release multi-GPU inference script.
-- [x] **2025/01/27**: Release [inference script](https://github.com/yangchris11/samurai/blob/master/sam2/tools/README.md#samurai-vos-inference) on VOS task (SA-V)!
-- [x] **2024/11/21**: Release [demo script](https://github.com/yangchris11/samurai?tab=readme-ov-file#demo-on-custom-video) to support inference on video (bounding box prompt).
-- [x] **2024/11/20** Release [inference script](https://github.com/yangchris11/samurai?tab=readme-ov-file#main-inference) on VOT task (LaSOT, LaSOT-ext, GOT-10k, UAV123, TrackingNet, OTB100)!
-- [x] **2024/11/19**: Release [paper](https://arxiv.org/abs/2411.11922), [code](https://github.com/yangchris11/samurai), and [raw results](https://drive.google.com/drive/folders/1ssiDmsC7mw5AiItYQG4poiR1JgRq305y?usp=sharing)!
+---
 
-## Getting Started
-
-#### SAMURAI Installation 
-
-SAM 2 needs to be installed first before use. The code requires `python>=3.10`, as well as `torch>=2.3.1` and `torchvision>=0.18.1`. Please follow the instructions [here](https://github.com/facebookresearch/sam2?tab=readme-ov-file) to install both PyTorch and TorchVision dependencies. You can install **the SAMURAI version** of SAM 2 on a GPU machine using:
+## 📁 Project Structure (simplified)
 ```
-cd sam2
-pip install -e .
-pip install -e ".[notebooks]"
+samurai/
+├── scripts/
+│ └── demo.py
+├── weights/
+├── bbox_outputs/
+├── Results/
 ```
 
-Please see [INSTALL.md](https://github.com/facebookresearch/sam2/blob/main/INSTALL.md) from the original SAM 2 repository for FAQs on potential issues and solutions.
 
-Install other requirements:
-```
-pip install matplotlib==3.7 tikzplotlib jpeg4py opencv-python lmdb pandas scipy loguru
-```
+You will mainly run the code from inside `scripts`.
 
-#### SAM 2.1 Checkpoint Download
 
-```
-cd checkpoints && \
-./download_ckpts.sh && \
-cd ..
-```
+---
 
-#### Data Preparation
+## 🚀 How to Run
 
-Please prepare the data in the following format:
-```
-data/LaSOT
-├── airplane/
-│   ├── airplane-1/
-│   │   ├── full_occlusion.txt
-│   │   ├── groundtruth.txt
-│   │   ├── img
-│   │   ├── nlp.txt
-│   │   └── out_of_view.txt
-│   ├── airplane-2/
-│   ├── airplane-3/
-│   ├── ...
-├── basketball
-├── bear
-├── bicycle
-...
-├── training_set.txt
-└── testing_set.txt
+Run the demo script like this:
+
+```bash
+python /root/samurai/scripts/demo.py \
+--video_path /root/samurai/clean.mp4 \
+--txt_path /root/samurai/bbox_outputs/first_frame_bbox_sam2.txt \
+--model_path /root/samurai/weights/sam2.1_hiera_tiny.pt \
+--video_output_path /root/samurai/Results/mot_output.mp4 \
+--save_to_video True
 ```
 
-#### Main Inference
-```
-python scripts/main_inference.py 
-```
+Arguments
 
-## Demo on Custom Video
+- video_path: input broadcast video
 
-To run the demo with your custom video or frame directory, use the following examples:
+- txt_path: bounding box for the target player(s)
 
-**Note:** The `.txt` file contains a single line with the bounding box of the first frame in `x,y,w,h` format while the SAM 2 takes `x1,y1,x2,y2` format as bbox input.
+- model_path: SAMURAI / SAM2 model checkpoint
 
-### Input is Video File
+- video_output_path: output result video
 
-```
-python scripts/demo.py --video_path <your_video.mp4> --txt_path <path_to_first_frame_bbox.txt>
-```
-
-### Input is Frame Folder
-```
-# Only JPG images are supported
-python scripts/demo.py --video_path <your_frame_directory> --txt_path <path_to_first_frame_bbox.txt>
-```
-
-## FAQs
-**Question 1:** Does SAMURAI need training? [issue 34](https://github.com/yangchris11/samurai/issues/34)
-
-**Answer 1:** Unlike real-life samurai, the proposed samurai do not require additional training. It is a zero-shot method, we directly use the weights from SAM 2.1 to conduct VOT experiments. The Kalman filter is used to estimate the current and future state (bounding box location and scale in our case) of a moving object based on measurements over time, it is a common approach that had been adopted in the field of tracking for a long time, which does not require any training. Please refer to code for more detail.
-
-**Question 2:** Does SAMURAI support streaming input (e.g. webcam)?
-
-**Answer 2:** Not yet. The existing code doesn't support live/streaming video as we inherit most of the codebase from the amazing SAM 2. Some discussion that you might be interested in: facebookresearch/sam2#90, facebookresearch/sam2#388 (comment).
-
-**Question 3:** How to use SAMURAI in longer video?
-
-**Answer 3:** See the discussion from sam2 https://github.com/facebookresearch/sam2/issues/264.
-
-**Question 4:** How do you run the evaluation on the VOT benchmarks?
-
-**Answer 4:** For LaSOT, LaSOT-ext, OTB, NFS please refer to the [issue 74](https://github.com/yangchris11/samurai/issues/74) for more details. For GOT-10k-test and TrackingNet, please refer to the official portal for submission.
-
-## Acknowledgment
-
-SAMURAI is built on top of [SAM 2](https://github.com/facebookresearch/sam2?tab=readme-ov-file) by Meta FAIR.
-
-The VOT evaluation code is modifed from [VOT Toolkit](https://github.com/votchallenge/toolkit) by Luka Čehovin Zajc.
-
-## Citation
-
-Please consider citing our paper and the wonderful `SAM 2` if you found our work interesting and useful.
-```
-@article{ravi2024sam2,
-  title={SAM 2: Segment Anything in Images and Videos},
-  author={Ravi, Nikhila and Gabeur, Valentin and Hu, Yuan-Ting and Hu, Ronghang and Ryali, Chaitanya and Ma, Tengyu and Khedr, Haitham and R{\"a}dle, Roman and Rolland, Chloe and Gustafson, Laura and Mintun, Eric and Pan, Junting and Alwala, Kalyan Vasudev and Carion, Nicolas and Wu, Chao-Yuan and Girshick, Ross and Doll{\'a}r, Piotr and Feichtenhofer, Christoph},
-  journal={arXiv preprint arXiv:2408.00714},
-  url={https://arxiv.org/abs/2408.00714},
-  year={2024}
-}
-
-@misc{yang2024samurai,
-  title={SAMURAI: Adapting Segment Anything Model for Zero-Shot Visual Tracking with Motion-Aware Memory}, 
-  author={Cheng-Yen Yang and Hsiang-Wei Huang and Wenhao Chai and Zhongyu Jiang and Jenq-Neng Hwang},
-  year={2024},
-  eprint={2411.11922},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV},
-  url={https://arxiv.org/abs/2411.11922}, 
-}
-```
+- save_to_video: True to export visualization video
